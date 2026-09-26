@@ -72,12 +72,19 @@
 \def\zyma@replacecount{-1}
 \def\MarkovAlgorithmDebugModeOn#1{%
 	\begingroup
-	\count0=#1
-	\xdef\zyma@replacecount{#1}%
-	\endgroup
+	\ifnum#1>-1 \expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+		{\ifnum-1<#1 \expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+			{\xdef\zyma@replacecount{#1}}
+			{\xdef\zyma@replacecount{-1}}}
+		{\xdef\zyma@replacecount{-1}}%
+	\hbox{Markov Algorithm Debug Mode: }\ifnum\zyma@replacecount=-1 \expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi{\hbox{Default}}{\zyma@replacecount}%
+	\endgroup\par
+	\noindent
 }
 \def\MarkovAlgorithmDebugModeOff{%
 	\def\zyma@replacecount{-1}%
+	\hbox{Markov Algorithm Debug Mode Off. }\par
+	\noindent
 }
 \def\MarkovAlgorithmInput{\begingroup\futurelet\zyma@temp\zyma@input@}
 \def\zyma@input@{%
