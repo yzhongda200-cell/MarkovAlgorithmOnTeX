@@ -1,0 +1,158 @@
+\catcode`\@=11\relax
+\def\MarkovAlgorithmCode{\begingroup\futurelet\zyma@temp\zyma@}
+\def\zyma@{%
+	\ifx[\zyma@temp\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+		{\zyma@o}
+		{\zyma@o[]}%
+}
+\def\zyma@o[#1]{%
+	\edef\zyma@label{#1}%
+	\expandafter\gdef\csname zyma@#1@label\endcsname{\zyma@relax}%
+	\count0=0
+	\catcode`\ =12
+	\catcode`\^^M=12
+	\zyma@c
+}
+\begingroup
+\catcode`\^^M=12
+\gdef\zyma@c#1{\zyma@c@#1^^M\zyma@relax}%
+\gdef\zyma@c@#1^^M#2\zyma@relax{%
+	\ifx\zyma@relax#2\zyma@relax\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi%
+		{\zyma@c@def{#1}\endgroup}%
+		{\zyma@c@def{#1}\zyma@c@#2\zyma@relax}%
+}%
+\endgroup
+\def\zyma@c@def#1{%
+	\ifx\zyma@relax#1\zyma@relax\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+		{}
+		{\zyma@c@def@#1::\zyma@relax}%
+}
+\def\zyma@c@def@#1::#2\zyma@relax{%
+	\ifx\zyma@relax#2\zyma@relax\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+		{\zyma@c@def@@#1:\zyma@relax}
+		{\zyma@c@def@a#1\zyma@relax#2\zyma@relax}%
+}
+\def\zyma@c@def@a#1\zyma@relax#2#3\zyma@relax{%
+	\ifx\zyma@relax#3\zyma@relax\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+		{\zyma@pattern@def{}{#1}{#2}}
+		{\zyma@c@def@b#1\zyma@relax#2#3\zyma@relax}%
+}
+\def\zyma@c@def@b#1\zyma@relax#2:\zyma@relax{%
+	\zyma@pattern@def*{#1}{#2}%
+}
+\def\zyma@c@def@@#1:#2\zyma@relax{%
+	\ifx\zyma@relax#2\zyma@relax\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+		{}
+		{\zyma@pattern@def{}{#1}{#2}}%
+}
+\def\zyma@pattern@def#1#2#3{%
+	\advance\count0 by 1
+	\expandafter\xdef\csname zyma@\zyma@label @count\endcsname{\the\count0}%
+	\expandafter\xdef\csname zyma@\zyma@label @\the\count0@before#1\endcsname{\zyma@trim{#2}}%
+	\expandafter\xdef\csname zyma@\zyma@label @\the\count0@after#1\endcsname{\expandafter\zyma@trim\expandafter{\zyma@c@def@@a#3\zyma@relax}}%
+}
+\def\zyma@c@def@@a#1:\zyma@relax{#1}
+\def\zyma@trim#1{%
+	\ifx\zyma@relax#1\zyma@relax\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+		{}
+		{\zyma@trim@a#1\zyma@relax}%
+}
+\def\zyma@trim@a#1#2\zyma@relax{%
+	\ifnum`#1=32 \expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+		{\zyma@trim@a#2\zyma@relax}
+		{\zyma@trim@b#1\zyma@relax\zyma@relax#2;\zyma@relax}%
+}
+\def\zyma@trim@b#1\zyma@relax#2\zyma@relax#3#4\zyma@relax{%
+	\ifx\zyma@relax#4\zyma@relax\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+		{#1}
+		{\ifnum`#3=32 \expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+			{\zyma@trim@b#1\zyma@relax#2#3\zyma@relax#4\zyma@relax}
+			{\zyma@trim@b#1#2#3\zyma@relax\zyma@relax#4\zyma@relax}}%
+}
+\def\zyma@replacecount{-1}
+\def\MarkovAlgorithmDebugModeOn#1{%
+	\begingroup
+	\count0=#1
+	\xdef\zyma@replacecount{#1}%
+	\endgroup
+}
+\def\MarkovAlgorithmDebugModeOff{%
+	\def\zyma@replacecount{-1}%
+}
+\def\MarkovAlgorithmInput{\begingroup\futurelet\zyma@temp\zyma@input@}
+\def\zyma@input@{%
+	\ifx[\zyma@temp\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+		{\zyma@input@o}
+		{\zyma@input@o[]}%
+}
+\def\zyma@input@o[#1]{%
+	\edef\zyma@label{#1}%
+	\expandafter\ifx\csname zyma@#1@label\endcsname\relax\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+		{\endgroup}
+		{\count0=0 \count1=0 \catcode`\ =12
+			\zyma@input@c}%
+}
+\def\zyma@input@c{%
+	\ifnum\zyma@replacecount=-1 \expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+		{\zyma@input@c@n}
+		{\zyma@input@c@d}%
+}
+\def\zyma@input@c@n#1{%
+	\ifnum\csname zyma@\zyma@label @count\endcsname>\count0 \expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+		{\advance\count0 by 1
+			\expandafter\ifx\csname zyma@\zyma@label @\the\count0@before*\endcsname\relax\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+				{\expandafter\zyma@expandafter@fifteen\expandafter\zyma@replace@a\zyma@expandafter@fifteen{\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\csname zyma@\zyma@label @\the\count0@before\endcsname\expandafter\expandafter\expandafter}\expandafter\expandafter\expandafter{\csname zyma@\zyma@label @\the\count0@after\endcsname}{#1}{\zyma@input@c@n}{\zyma@input@c@n}{}}
+				{\expandafter\zyma@expandafter@fifteen\expandafter\zyma@replace@b\zyma@expandafter@fifteen{\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\csname zyma@\zyma@label @\the\count0@before*\endcsname\expandafter\expandafter\expandafter}\expandafter\expandafter\expandafter{\csname zyma@\zyma@label @\the\count0@after*\endcsname}{#1}{\zyma@input@c@n}{\zyma@input@c@n}{}}}
+		{\count0=0 \zyma@input@c@n{#1}}%
+}
+\def\zyma@input@c@d#1{%
+	0: #1\\ \zyma@input@c@d@{#1}%
+}
+\def\zyma@input@c@d@#1{%
+	\ifnum\zyma@replacecount=\count1 \expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+		{\endgroup}
+		{\ifnum\csname zyma@\zyma@label @count\endcsname>\count0 \expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+			{\advance\count0 by 1
+				\expandafter\ifx\csname zyma@\zyma@label @\the\count0@before*\endcsname\relax\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+					{\expandafter\zyma@expandafter@fifteen\expandafter\zyma@replace@a\zyma@expandafter@fifteen{\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\csname zyma@\zyma@label @\the\count0@before\endcsname\expandafter\expandafter\expandafter}\expandafter\expandafter\expandafter{\csname zyma@\zyma@label @\the\count0@after\endcsname}{#1}{\zyma@input@c@d@}{\zyma@input@c@d@@}{\the\count1: }}
+					{\expandafter\zyma@expandafter@fifteen\expandafter\zyma@replace@b\zyma@expandafter@fifteen{\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\csname zyma@\zyma@label @\the\count0@before*\endcsname\expandafter\expandafter\expandafter}\expandafter\expandafter\expandafter{\csname zyma@\zyma@label @\the\count0@after*\endcsname}{#1}{\zyma@input@c@d@}{\zyma@input@c@d@@}{\the\count1: }}}
+			{\count0=0 \zyma@input@c@d@{#1}}}%
+}
+\def\zyma@input@c@d@@#1{%
+	\the\count1: #1\\ \zyma@input@c@d@{#1}%
+}
+\def\zyma@replace@a#1#2#3#4#5#6{%
+	\ifx\zyma@relax#1\zyma@relax\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+		{\count0=0 \advance\count1 by 1 #5{#2#3}}
+		{\def\zyma@replace@@a##1#1##2\zyma@relax{%
+			\ifx\zyma@relax##2\zyma@relax\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+				{\ifnum\csname zyma@\zyma@label @count\endcsname=\count0 \expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+					{\ifnum\zyma@replacecount>-1 \expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+						{finish: ##1}
+						{##1}\endgroup}
+					{#4{##1}}}
+				{\count0=0 \advance\count1 by 1 \expandafter#5\expandafter{\zyma@replace@@@##1#2##2\zyma@relax}}%
+		}%
+		\def\zyma@replace@@@##1#1\zyma@relax{##1}%
+		\zyma@replace@@a#3#1\zyma@relax}%
+}
+\def\zyma@replace@b#1#2#3#4#5#6{%
+	\ifx\zyma@relax#1\zyma@relax\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+		{\advance\count1 by 1 #6#2#3\endgroup}
+		{\def\zyma@replace@@b##1#1##2\zyma@relax{%
+			\ifx\zyma@relax##2\zyma@relax\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+				{\ifnum\csname zyma@\zyma@label @count\endcsname=\count0 \expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+					{\ifnum\zyma@replacecount>-1 \expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
+						{finish: ##1}
+						{##1}\endgroup}
+					{#4{##1}}}
+				{\advance\count1 by 1 #6\zyma@replace@@@##1#2##2\zyma@relax\endgroup}%
+		}%
+		\def\zyma@replace@@@##1#1\zyma@relax{##1}%
+		\zyma@replace@@b#3#1\zyma@relax}%
+}
+\def\zyma@expandafter@fifteen{\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter}
+\def\zyma@relax{\zyma@relax@}
+\long\def\@firstoftwo#1#2{#1}
+\long\def\@secondoftwo#1#2{#2}
+\catcode`\@=12\relax
