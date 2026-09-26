@@ -9,6 +9,14 @@
 	\edef\zyma@label{#1}%
 	\expandafter\gdef\csname zyma@#1@label\endcsname{\zyma@relax}%
 	\count0=0
+	\catcode`\_=12
+	\catcode`\#=12
+	\catcode`\$=12
+	\catcode`\&=12
+	\catcode`\^=12
+	\catcode`\%=12
+	\catcode`\~=12
+	\catcode92=12
 	\catcode`\ =12
 	\catcode`\^^M=12
 	\zyma@c
@@ -96,7 +104,7 @@
 	\edef\zyma@label{#1}%
 	\expandafter\ifx\csname zyma@#1@label\endcsname\relax\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi
 		{\endgroup}
-		{\count0=0 \count1=0 \catcode`\ =12
+		{\count0=0 \count1=0 \catcode`\ =12 \catcode`\_=12 \catcode`\#=12 \catcode`\$=12 \catcode`\&=12 \catcode`\^=12 \catcode`\%=12 \catcode`\~=12 \catcode92=12
 			\zyma@input@c}%
 }
 \def\zyma@input@c{%
